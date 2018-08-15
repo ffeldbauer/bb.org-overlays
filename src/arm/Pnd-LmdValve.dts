@@ -1,0 +1,136 @@
+/*
+ * Copyright (C) 2015 Florian Feldbauer <feldbaue@kph.uni-mainz.de>
+ *
+ * Device Tree Overlay to control the Vacuum Valves via GPIOs
+ * HDMI cape has to be disabled in order to use this DTO
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ */
+
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/board/am335x-bbw-bbb-base.h>
+#include <dt-bindings/pinctrl/am33xx.h>
+
+/{
+  compatible = "ti,beaglebone", "ti,beaglebone-black";
+
+  /*identification*/
+  part-number = "Pnd-LmdValve";
+  version = "00A0";
+
+  /* state the resources this cape uses */
+  exclusive-use =
+    /* BVSP */
+    "P9.11", "P9.13", "P9.15",                     /* pin header */
+    "gpio0_30", "gpio0_31", "gpio1_16", "gpio2_0", /* hardware ip */
+    /* BVBY */
+    "P9.12", "P9.14", "P9.16",
+    "gpio1_28", "gpio1_18", "gpio1_19",
+    /* BVn2 */
+    "P9.21", "P9.23", "P9.25",
+    "gpio0_3", "gpio1_17", "gpio3_21",
+    /* BVBP */
+    "P9.22", "P9.24", "P9.26",
+    "gpio0_2", "gpio0_15", "gpio0_14",
+    /* BVVB */
+    "P9.27", "P9.29", "P9.31",
+    "gpio3_19", "gpio3_15", "gpio3_15",
+    /* GVBP */
+    "P8.7",  "P8.9",  "P8.11",
+    "gpio2_2", "gpio2_5", "gpio1_13",
+    /* GVVB */
+    "P8.8",  "P8.10", "P8.12",
+    "gpio2_3", "gpio2_4", "gpio1_12",
+    /* GVBY */
+    "P8.13", "P8.15", "P8.17",
+    "gpio0_23", "gpio1_15", "gpio0_27",
+    /* GVUP */
+    "P8.14", "P8.16", "P8.18",
+    "gpio0_26", "gpio1_14", "gpio2_1",
+    /* GVDO */
+    "P8.26", "P8.28", "P8.30",
+    "gpio1_29", "gpio2_24", "gpio2_25",
+    /* spare1 */
+    "P8.27", "P8.29", "P8.31",
+    "gpio2_22", "gpio2_23", "gpio0_10";
+    /* spare2 */
+    "P8.40", "P8.42", "P8.44",
+    "gpio2_13", "gpio2_11", "gpio2_9";
+
+  fragment@0 {
+    target = <&am33xx_pinmux>;
+    __overlay__ {
+      pnd_lmd_vacvalve_pins: pinmux_pnd_lmd_vacvalves_pins {
+        pinctrl-single,pins = <
+          /* BVSP */
+          BONE_P9_11 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P9_13 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P9_15 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          0x088      ( PIN_INPUT           | MUX_MODE7 ) /* P9.15 ( INPUT_EN | PULL_DISABLE ) */
+          /* BVBY */
+          BONE_P9_12 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P9_14 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P9_16 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          /* BVN2 */
+          BONE_P9_21 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P9_23 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P9_25 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          /* BVBP */
+          BONE_P9_22 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P9_24 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P9_26 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          /* BVVB */
+          BONE_P9_27 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P9_29 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P9_31 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          /* GVBP */
+          BONE_P8_07 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P8_09 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P8_11 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          /* GVVB */
+          BONE_P8_08 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P8_10 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P8_12 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          /* GVBY */
+          BONE_P8_13 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P8_15 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P8_17 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          /* GVUP */
+          BONE_P8_14 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P8_16 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P8_18 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          /* GVDO */
+          BONE_P8_26 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P8_28 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P8_30 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          /* SPARE1 */
+          BONE_P8_27 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P8_29 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P8_31 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          /* SPARE2 */
+          BONE_P8_40 ( PIN_OUTPUT_PULLDOWN | MUX_MODE7 )
+          BONE_P8_42 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+          BONE_P8_44 ( PIN_INPUT_PULLDOWN  | MUX_MODE7 )
+        >;
+      };
+    };
+  };
+
+  fragment@1 {
+    target = <&ocp>;
+    __overlay__ {
+      pnd_lmd_vacvalve_pins_pinmux {
+        compatible = "bone-pinmux-helper";
+        status = "okay";
+        pinctrl-names = "default";
+        pinctrl-0 = <&pnd_lmd_vacvalve_pins>;
+      };
+    };
+  };
+};
+
